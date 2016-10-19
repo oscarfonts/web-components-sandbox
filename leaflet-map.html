@@ -1,0 +1,44 @@
+<link rel="import" href="custom-element.html">
+
+<template>
+	<style>
+		@import "//unpkg.com/leaflet@1.0.1/dist/leaflet.css";
+		:host #map {
+			display: block;
+			height: 100%;
+		}
+	</style>
+	<div id="map"></div>
+</template>
+
+<script src="//unpkg.com/leaflet@1.0.1/dist/leaflet.js"></script>
+<script>
+(function() {
+	document.registerElement('leaflet-map', {
+		prototype: Object.create(CustomElement, {
+			templateDocument: {
+				value: (document._currentScript || document.currentScript).ownerDocument
+			},
+			ready: {
+				value: function() {
+					var mapElement = this.DOM.querySelector("#map");
+
+					var options = this.parseAttributes({
+						center: [0, 0],
+						zoom: 1
+					});
+
+					this.map = L.map(mapElement, options);
+
+					for (var i = 0; i < this.children.length; i++) {
+						this.children[i].map = this.map;
+					}
+
+				}
+			}
+		})
+	});
+}());
+</script>
+
+<link rel="import" href="leaflet-tilelayer.html">

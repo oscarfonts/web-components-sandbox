@@ -1,0 +1,59 @@
+<script>
+	// Using Custom Elements v0 spec: https://www.html5rocks.com/en/tutorials/webcomponents/customelements/
+	
+	CustomElement = Object.create(HTMLElement.prototype);
+
+	CustomElement.parseAttributes = function(defaultValues) {
+		var typeCast = function(val) {
+			if (val==="" | val==="true") return true; // Boolean true
+			if (val==="false") return false; // Boolean false
+			if (!isNaN(val)) return +val; // Number
+			try {
+				return JSON.parse(val); // Array or JSON object
+			} catch (e) {
+				return val;	// Anything else is a string
+			}
+		};
+
+		var camelCase = function(str) {
+			return str.replace(/-([a-z])/g, function(groups) {
+				return groups[1].toUpperCase();
+			});
+		};
+
+		var obj = (defaultValues || {});
+		for (var i = 0; i < this.attributes.length; i ++) {
+			var attr = this.attributes[i];
+			var name = camelCase(attr.name);
+			var value = typeCast(attr.value);
+			obj[name] = value;
+		}
+		return obj;
+	};
+
+	// Get template from this.templateDocument and apply as shadow DOM at this.DOM
+	CustomElement.createdCallback = function() {
+		if(this.templateDocument) {
+			var template = this.templateDocument.querySelector('template');
+			if(template) {
+				this.DOM = this.createShadowRoot();
+				this.DOM.appendChild(document.importNode(template.content, true));
+			}
+		}
+	};
+
+	// Wait until local DOM is rendered and call this.ready
+	CustomElement.attachedCallback = function() {
+		setTimeout(this.ready.bind(this), 0);
+	};
+
+	// Fill with specific logic on extended elements
+	CustomElement.ready = function() {
+		console.log("Local DOM rendered");
+	};
+
+	// Fill with specific logic on extended elements
+	CustomElement.attributeChangedCallback = function(name, oldVal, newVal) {
+		console.log("Attribute " + name + " changed value from " + oldVal + " to " + newVal);
+	};
+</script>

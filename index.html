@@ -3,7 +3,7 @@
 	<head>
 		<title>Map WebComponent Test</title>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/0.7.22/webcomponents.js"></script>
-		<link rel="import" href="leaflet-map-vanilla.html"/>
+		<link rel="import" href="leaflet-map.html"/>
 		<style>
 			html, body, leaflet-map {
 				margin: 0;
@@ -12,6 +12,13 @@
 		</style>
 	</head>
 	<body>
-		<leaflet-map/>
+		<leaflet-map center="[41.4, 2.1]" zoom="12">
+			<leaflet-tilelayer src="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png">
+				Base Layer &copy; <a href="http://openstreetmap.org">OpenStreetMap Contributors</a>
+			</leaflet-tilelayer>
+			<leaflet-tilelayer src="http://vertex.fonts.cat:8080/geoserver/gwc/service/tms/1.0.0/TMB%3ALINIES_METRO@EPSG%3A900913@png8/{z}/{x}/{-y}.png8">
+				Overlay &copy; <a href="http://tmb.cat">Transports Metropolitans de Barcelona</a>
+			</leaflet-tilelayer>
+		</leaflet-map>
 	</body>
 </html>

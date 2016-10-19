@@ -1,0 +1,19 @@
+<script>
+(function() {
+	document.registerElement('leaflet-tilelayer', {
+		prototype: Object.create(CustomElement, {
+			map: {
+				set: function(map) {
+					var options = this.parseAttributes();
+					options.attribution = this.innerHTML;
+
+					var src = options.src;
+					delete options.src;
+
+					L.tileLayer(src, options).addTo(map);
+				}
+			}
+		})
+	});
+}());
+</script>
